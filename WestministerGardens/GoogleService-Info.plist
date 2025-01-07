@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>API_KEY</key>
+	<string>AIzaSyDPgl47BMkoBXgehyzz04GlCHHWdFsUuIo</string>
+	<key>GCM_SENDER_ID</key>
+	<string>713403585831</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>lorrin.AppDev.WestministerGardens</string>
+	<key>PROJECT_ID</key>
+	<string>westminister-gardens</string>
+	<key>STORAGE_BUCKET</key>
+	<string>westminister-gardens.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:713403585831:ios:edc92d3795395fa8384502</string>
+</dict>
+</plist>

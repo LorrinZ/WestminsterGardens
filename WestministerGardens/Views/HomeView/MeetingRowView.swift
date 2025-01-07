@@ -1,0 +1,31 @@
+//
+//  MeetingRowView.swift
+//  WestministerGardens
+//
+//  Created by Yukie on 26/09/2024.
+//
+
+import SwiftUI
+
+struct MeetingRowView: View {
+    var meetings: [Meeting]
+    
+    var body: some View {
+        ScrollView(.horizontal, showsIndicators: false) {
+            HStack {
+                ForEach(meetings) { meeting in
+                    MeetingCard(meeting: meeting)
+                        .frame(maxWidth:300)
+                }
+            }
+            .padding()
+            .background(Color.blue.opacity(0.1))
+            .clipShape(RoundedRectangle(cornerRadius: 18))
+        }
+//        .padding(.vertical)
+    }
+}
+
+#Preview {
+    MeetingRowView(meetings: testData.meetings)
+}
