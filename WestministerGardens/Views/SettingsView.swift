@@ -9,6 +9,7 @@ import SwiftUI
 
 struct SettingsView: View {
 //    @EnvironmentObject var themeViewModel: ThemeViewModel // Access the theme view model
+    @EnvironmentObject var adminRights: AdminRights
 
     var body: some View {
         VStack {
@@ -26,6 +27,14 @@ struct SettingsView: View {
             //Placeholder
             Spacer()
             Text("Settings")
+            
+            Spacer()
+            LoginScreenView()
+//            if adminRights.isAdmin {
+//                LoginScreenView()
+//            } else {
+//                Text("Successfully logged in.").foregroundColor(<#T##color: Color?##Color?#>)
+//            }
             
             Spacer()
         }

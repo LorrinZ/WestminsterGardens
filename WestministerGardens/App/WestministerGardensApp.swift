@@ -37,6 +37,8 @@ struct WestministerGardensApp: App {
     var body: some Scene {
         WindowGroup {
             ContentView().environment(\.colorScheme, .light) // .light or .dark
+                .environmentObject(AdminRights())
+            
 //                .onAppear() {
 //                    testFirebase()
 //                }

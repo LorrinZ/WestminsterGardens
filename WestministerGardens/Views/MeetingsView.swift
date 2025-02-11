@@ -1,54 +1,24 @@
 import SwiftUI
 
 struct MeetingsView: View {
-    @State private var meetingTitle: String = ""
-    @State private var meetingDescription: String = ""
-    @State private var selectedDate = Date()  // Holds the selected date and time
-    @State private var participants: String = ""  // Comma-separated list of participants
+    @State private var newMeetingTitle: String = ""
+    @State private var newMeetingDescription: String = ""
+    @State private var newSelectedDate = Date()
+    @State private var newParticipants: String = ""
+    @State private var isAddingNewMeeting = false  // Controls the sheet presentation
+    @EnvironmentObject var adminRights: AdminRights
     
     @ObservedObject var meetingViewModel: MeetingViewModel  // Inject the view model
     
     var body: some View {
         NavigationView {
             VStack {
-                Form {
-                    // Meeting Title
-                    Section(header: Text("Meeting Title")) {
-                        TextField("Enter meeting title", text: $meetingTitle)
-                    }
-
-                    // Meeting Description
-                    Section(header: Text("Meeting Description")) {
-                        TextField("Enter meeting description", text: $meetingDescription)
-                    }
-
-                    // Date Picker for Meeting Date and Time
-                    Section(header: Text("Meeting Date & Time")) {
-                        DatePicker("Select Date & Time", selection: $selectedDate, displayedComponents: [.date, .hourAndMinute])
-                            .datePickerStyle(WheelDatePickerStyle())
-                            .labelsHidden()
-                    }
-
-                    // Participants
-                    Section(header: Text("Participants (comma-separated)")) {
-                        TextField("Enter participants", text: $participants)
-                    }
-
-                    // Save Meeting Button
-                    Section {
-                        Button(action: {
-                            saveMeeting()  // Call save function
-                        }) {
-                            Text("Save Meeting")
-                                .frame(maxWidth: .infinity, alignment: .center)
-                                .padding()
-                                .background(Color.blue)
-                                .foregroundColor(.white)
-                                .cornerRadius(8)
-                        }
-                    }
-                    // List of Existing Meetings
-                    List {
+                // List of Existing Meetings
+                List {
+                    if meetingViewModel.meetings.isEmpty {
+                        Text("There are no upcoming meetings.")
+                            .foregroundColor(.gray)
+                    } else {
                         ForEach(meetingViewModel.meetings) { meeting in
                             VStack(alignment: .leading) {
                                 Text(meeting.title)
@@ -63,32 +33,89 @@ struct MeetingsView: View {
                             .padding(.vertical, 5)
                         }
                     }
-                    .listStyle(PlainListStyle())  // Optional styling for the list
-                    .frame(minHeight: 400)
                 }
-                .navigationTitle("Schedule Meeting")
+                .listStyle(PlainListStyle())  // Optional styling for the list
+            }
+            .navigationTitle("Meetings!")
+            .toolbar {
+                ToolbarItem {
+                    Button {
+                        isAddingNewMeeting = true
+                    } label: {
+                        Image(systemName: "plus")
+                    }
                 }
-                
-                
+            }
+            .sheet(isPresented: $isAddingNewMeeting) {
+                NavigationView {
+                    Form {
+                        // Meeting Title
+                        Section(header: Text("Meeting Title")) {
+                            TextField("Enter meeting title", text: $newMeetingTitle)
+                        }
+
+                        // Meeting Description
+                        Section(header: Text("Meeting Description")) {
+                            TextField("Enter meeting description", text: $newMeetingDescription)
+                        }
+
+                        // Date Picker for Meeting Date and Time
+                        Section(header: Text("Meeting Date & Time")) {
+                            DatePicker("Select Date & Time", selection: $newSelectedDate, displayedComponents: [.date, .hourAndMinute])
+                                .datePickerStyle(WheelDatePickerStyle())
+                                .labelsHidden()
+                        }
+
+                        // Participants
+                        Section(header: Text("Participants (comma-separated)")) {
+                            TextField("Enter participants", text: $newParticipants)
+                        }
+
+                        // Save Meeting Button
+                        Section {
+                            Button(action: {
+                                saveNewMeeting()
+                                isAddingNewMeeting = false
+                            }) {
+                                Text("Save Meeting")
+                                    .frame(maxWidth: .infinity, alignment: .center)
+                                    .padding()
+                                    .background(Color.blue)
+                                    .foregroundColor(.white)
+                                    .cornerRadius(8)
+                            }
+                        }
+                    }
+                    .navigationTitle("Add New Meeting")
+                    .toolbar {
+                        ToolbarItem(placement: .cancellationAction) {
+                            Button("Cancel") {
+                                isAddingNewMeeting = false
+                            }
+                        }
+                    }
+                }
+            }
         }
     }
 
-    // Function to handle saving the meeting
-    func saveMeeting() {
-        let participantList = participants.components(separatedBy: ",").map { $0.trimmingCharacters(in: .whitespaces) }
+    // Function to handle saving the new meeting
+    func saveNewMeeting() {
+        let participantList = newParticipants.components(separatedBy: ",").map { $0.trimmingCharacters(in: .whitespaces) }
 
+        // Add the new meeting to the view model
         meetingViewModel.addMeeting(
-            title: meetingTitle,
-            date: selectedDate,
-            description: meetingDescription,
+            title: newMeetingTitle,
+            date: newSelectedDate,
+            description: newMeetingDescription,
             participants: participantList
         )
 
         // Clear fields after saving
-        meetingTitle = ""
-        meetingDescription = ""
-        selectedDate = Date()
-        participants = ""
+        newMeetingTitle = ""
+        newMeetingDescription = ""
+        newSelectedDate = Date()
+        newParticipants = ""
     }
 
     // Helper function to format the date
