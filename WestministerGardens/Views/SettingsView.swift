@@ -27,9 +27,9 @@ struct SettingsView: View {
             //Placeholder
             Spacer()
             Text("Settings")
-            
-            Spacer()
-            LoginScreenView()
+//            
+//            Spacer()
+//            LoginScreenView()
 //            if adminRights.isAdmin {
 //                LoginScreenView()
 //            } else {

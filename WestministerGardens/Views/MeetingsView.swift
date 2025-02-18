@@ -7,7 +7,7 @@ struct MeetingsView: View {
     @State private var newParticipants: String = ""
     @State private var isAddingNewMeeting = false  // Controls the sheet presentation
     @EnvironmentObject var adminRights: AdminRights
-    
+    @Binding var isAdmin: Bool
     @ObservedObject var meetingViewModel: MeetingViewModel  // Inject the view model
     
     var body: some View {
@@ -38,11 +38,13 @@ struct MeetingsView: View {
             }
             .navigationTitle("Meetings!")
             .toolbar {
-                ToolbarItem {
-                    Button {
-                        isAddingNewMeeting = true
-                    } label: {
-                        Image(systemName: "plus")
+                if isAdmin {
+                    ToolbarItem {
+                        Button {
+                            isAddingNewMeeting = true
+                        } label: {
+                            Image(systemName: "plus")
+                        }
                     }
                 }
             }
@@ -72,19 +74,21 @@ struct MeetingsView: View {
                         }
 
                         // Save Meeting Button
-                        Section {
-                            Button(action: {
-                                saveNewMeeting()
-                                isAddingNewMeeting = false
-                            }) {
-                                Text("Save Meeting")
-                                    .frame(maxWidth: .infinity, alignment: .center)
-                                    .padding()
-                                    .background(Color.blue)
-                                    .foregroundColor(.white)
-                                    .cornerRadius(8)
+                        
+                            Section {
+                                Button(action: {
+                                    saveNewMeeting()
+                                    isAddingNewMeeting = false
+                                }) {
+                                    Text("Save Meeting")
+                                        .frame(maxWidth: .infinity, alignment: .center)
+                                        .padding()
+                                        .background(Color.blue)
+                                        .foregroundColor(.white)
+                                        .cornerRadius(8)
+                                }
                             }
-                        }
+                        
                     }
                     .navigationTitle("Add New Meeting")
                     .toolbar {

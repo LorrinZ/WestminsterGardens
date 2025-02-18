@@ -4,62 +4,56 @@
 //
 //  Created by Maggie Otto on 21/01/2025.
 //
-
 import SwiftUI
-
 struct LoginScreenView: View {
-    
-    @ObservedObject var viewModel: LoginViewModel = LoginViewModel()
-    @EnvironmentObject var adminRights: AdminRights
-    
+    @Binding var isLoggedIn: Bool
+    @Binding var isAdmin: Bool
+    @State private var username = ""
+    @State private var password = ""
+    @State private var showError = false
+    let normUsername = "norm"
+    let normPassword = "password321"
+    let adminUsername = "admin"
+    let adminPassword = "password123"
     var body: some View {
         VStack {
-            
             Spacer()
+            Text("Login")
+                .font(.title)
+                .padding()
             
-            VStack {
-                TextField(
-"Login.UsernameField.Title".localized,
-                    text: $viewModel.username
-                )
-                .autocapitalization(.none)
-                .disableAutocorrection(true)
-                .padding(.top, 20)
-                
-                Divider()
-                
-                SecureField(
-                    "Login.PasswordField.Title".localized,
-                    text: $viewModel.password
-                )
-                .padding(.top, 20)
-                
-                Divider()
+            Form {
+                Section {
+                    TextField("Username", text: $username)
+                        .textInputAutocapitalization(.never)
+                        .autocorrectionDisabled()
+                    SecureField("Password", text: $password)
+                }
             }
+            .frame(height: 150)
+            .cornerRadius(10)
+            .padding()
+            Button("Login") {
+                if username == adminUsername && password == adminPassword {
+                    isLoggedIn = true
+                    isAdmin = true
+                } else if username == normUsername && password == normPassword {
+                    isLoggedIn = true
+                    isAdmin = false
+                } else {
+                    showError = true
+                    
+                    
+                }
+            }
+            .buttonStyle(.borderedProminent)
+            .padding()
             
+            if showError {
+                Text("Invalid credentials")
+                    .foregroundColor(.red)
+            }
             Spacer()
-            
-            Button(
-                action: viewModel.login,
-//                action: {
-//                    self.adminRights.isAdmin.toggle()
-//                },
-                label: {
-                    Text("Login.LoginButton.Title".localized)
-                                            .font(.system(size: 24, weight: .bold, design: .default))
-                                            .frame(maxWidth: .infinity, maxHeight: 60)
-                                            .foregroundColor(Color.white)
-                                            .background(Color.blue)
-                                            .cornerRadius(10)
-                                    }
-                                )
-                            }
-                            .padding(30)
-                        }
-                    }
-
-                    struct LoginScreen_Previews: PreviewProvider {
-                        static var previews: some View {
-                            LoginScreenView()
-                        }
-                    }
+        }
+    }
+}
