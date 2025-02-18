@@ -2,7 +2,7 @@ import Foundation
 import Combine
 
 class MeetingViewModel: ObservableObject {
-    @Published var meetings: [Meeting] = []
+    @Published var meetings: [Meeting] = testData.meetings
 
     // Function to add a new meeting
     func addMeeting(title: String, date: Date, description: String, participants: [String]) {

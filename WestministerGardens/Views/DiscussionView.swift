@@ -1,7 +1,7 @@
 import SwiftUI
 
 struct DiscussionView: View {
-    @State private var discussions: [Discussion] = testData.discussions
+    @ObservedObject var discussionViewModel: DiscussionViewModel
     @State private var newDiscussionTitle: String = ""
     @State private var newDiscussionContent: String = ""
     @State private var newCommentContent: [String: String] = [:]  // Dictionary to hold comment content per discussion
@@ -53,7 +53,7 @@ struct DiscussionView: View {
                 }
 
                 // List of discussions with expandable comments section
-                List(discussions) { discussion in
+                List(discussionViewModel.discussions) { discussion in
                     VStack(alignment: .leading, spacing: 10) {
                         Text(discussion.title)
                             .font(.headline)
@@ -116,9 +116,7 @@ struct DiscussionView: View {
 
     private func addDiscussion() {
         guard !newDiscussionTitle.isEmpty && !newDiscussionContent.isEmpty else { return }
-        
-        let newDiscussion = Discussion(id: UUID().uuidString, title: newDiscussionTitle, content: newDiscussionContent, dateCreated: Date(), author: "Admin", comments: [])
-        discussions.append(newDiscussion)
+        let newDiscussion = discussionViewModel.addDiscussion(title: newDiscussionTitle, content: newDiscussionContent, dateCreated: Date(), author: "Admin")
         commentVisibility[newDiscussion.id] = false  // Initialize visibility for the new discussion
         newCommentContent[newDiscussion.id] = ""  // Initialize new comment content for the new discussion
         newDiscussionTitle = ""
@@ -129,9 +127,8 @@ struct DiscussionView: View {
     private func addComment(to discussion: Discussion) {
         guard let commentContent = newCommentContent[discussion.id], !commentContent.isEmpty else { return }  // Ensure comment isn't empty
         
-        if let index = discussions.firstIndex(where: { $0.id == discussion.id }) {
-            let newComment = Comment(id: UUID().uuidString, content: commentContent, author: "User", dateCreated: Date())
-            discussions[index].comments.append(newComment)
+        if let index = discussionViewModel.discussions.firstIndex(where: { $0.id == discussion.id }) {
+            let newComment = discussionViewModel.addComment(to: discussion, content: commentContent, dateCreated: Date(), author: "User")
             newCommentContent[discussion.id] = ""  // Clear the comment input after posting
             
             // Ensure the comment section remains visible by keeping visibility state intact
@@ -149,8 +146,8 @@ struct DiscussionView: View {
     }
 }
 
-struct DiscussionView_Previews: PreviewProvider {
-    static var previews: some View {
-        DiscussionView()
-    }
-}
+//struct DiscussionView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        DiscussionView()
+//    }
+//}

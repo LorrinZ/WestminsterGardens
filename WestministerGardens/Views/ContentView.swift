@@ -10,22 +10,24 @@ import SwiftUI
 struct ContentView: View {
     @State private var isLoggedIn = false
     @State private var isAdmin = false
+    @State var meetingViewModel = MeetingViewModel()
+    @State var discussionViewModel = DiscussionViewModel()
 
     var body: some View {
         Spacer()
         if isLoggedIn {
             TabView {
-                HomeView()
+                HomeView(isLoggedIn: $isLoggedIn, meetingViewModel: meetingViewModel, discussionViewModel: discussionViewModel)
                     .tabItem {
                         Label("Home", systemImage: "house.fill")
                     }
                 
-                MeetingsView(isAdmin: $isAdmin, meetingViewModel: MeetingViewModel())
+                MeetingsView(isAdmin: $isAdmin, meetingViewModel: meetingViewModel)
                     .tabItem {
                         Label("Meetings", systemImage: "calendar")
                     }
                 
-                DiscussionView()
+                DiscussionView(discussionViewModel: discussionViewModel)
                     .tabItem {
                         Label("Discussions", systemImage: "message.fill")
                     }

@@ -6,7 +6,6 @@ struct MeetingsView: View {
     @State private var newSelectedDate = Date()
     @State private var newParticipants: String = ""
     @State private var isAddingNewMeeting = false  // Controls the sheet presentation
-    @EnvironmentObject var adminRights: AdminRights
     @Binding var isAdmin: Bool
     @ObservedObject var meetingViewModel: MeetingViewModel  // Inject the view model
     

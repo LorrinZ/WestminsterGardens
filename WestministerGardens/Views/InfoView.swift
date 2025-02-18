@@ -12,8 +12,8 @@ struct InfoView: View {
         VStack {
             ScrollView {
                 Text("Contacts").foregroundColor(.black).fontWeight(.bold).padding().font(.title)
-                ContactCardView(name:"Connie", role: "Community Manager", phone: "078462934890", email: "connie@westministergardens.org", imageName: "Connie")
-                ContactCardView(name:"CORVURAX LEAPS INTO SONARIA", role: "creature developer", phone: "000000000100", email: "SangToarecreator@westministergardens.org", imageName: "CORVURAX")
+                ContactCardView(name:"Connie", role: "Community Manager", phone: "078462934890", email: "connie@westministergardens.org.uk", imageName: "Connie")
+                ContactCardView(name:"George", role: "Porter", phone: "07303044050100", email: "george@westminstergardens.org.uk", imageName: "george")
                 
             }
             

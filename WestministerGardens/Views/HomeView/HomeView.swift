@@ -15,9 +15,12 @@
 import SwiftUI
 
 struct HomeView: View {
+    @Binding var isLoggedIn: Bool
     @State private var upcomingMeetings: [Meeting] = []
     @State private var recentDiscussions: [Discussion] = []
     @State private var notices: [Notice] = []
+    @ObservedObject var meetingViewModel: MeetingViewModel
+    @ObservedObject var discussionViewModel: DiscussionViewModel
 
     var body: some View {
         ZStack {
@@ -26,6 +29,7 @@ struct HomeView: View {
             
             NavigationStack {
                 ScrollView {
+
                     VStack(alignment: .leading) {
                         Text("Welcome to Westminster Gardens")
                             .font(FontConfig.titleFont)
@@ -39,11 +43,11 @@ struct HomeView: View {
                             .font(.headline)
                             .foregroundColor(.blue)
                             .padding(.bottom, 5)) {
-                                if upcomingMeetings.isEmpty {
+                                if meetingViewModel.meetings.isEmpty {
                                     Text("No upcoming meetings.")
                                         .foregroundColor(.gray)
                                 } else {
-                                    MeetingRowView(meetings: Array(upcomingMeetings.prefix(5)))
+                                    MeetingRowView(meetings: Array(meetingViewModel.meetings.prefix(5)))
                                 }
                             }
                             .padding(.horizontal)
@@ -55,11 +59,11 @@ struct HomeView: View {
                             .font(.headline)
                             .foregroundColor(.blue)
                             .padding(.bottom, 5)) {
-                                if recentDiscussions.isEmpty {
+                                if discussionViewModel.discussions.isEmpty {
                                     Text("No recent discussions.")
                                         .foregroundColor(.gray)
                                 } else {
-                                    ForEach(recentDiscussions.prefix(3)) { discussion in
+                                    ForEach(discussionViewModel.discussions.prefix(3)) { discussion in
                                         DiscussionCard(discussion: discussion)
                                     }
                                 }
@@ -88,6 +92,14 @@ struct HomeView: View {
 //                    .cornerRadius(12)
 //                    .shadow(radius: 5)
 //                    .padding()
+                    Button(action: {
+                        isLoggedIn = false
+                    }) {
+                        Text("Logout")
+                            .font(.headline)
+                            .foregroundColor(.red)
+                            .padding()
+                    }
                 }
                 .onAppear {
                     loadDashboardData()  // Load data when view appears
@@ -174,6 +186,3 @@ struct NoticeCard: View {
     }
 }
 
-#Preview {
-    HomeView()
-}
