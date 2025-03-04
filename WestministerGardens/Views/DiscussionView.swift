@@ -4,14 +4,13 @@ struct DiscussionView: View {
     @ObservedObject var discussionViewModel: DiscussionViewModel
     @State private var newDiscussionTitle: String = ""
     @State private var newDiscussionContent: String = ""
-    @State private var newCommentContent: [String: String] = [:]  // Dictionary to hold comment content per discussion
-    @State private var isNewPostExpanded: Bool = false  // Toggle for new post section
-    @State private var commentVisibility: [String: Bool] = [:]  // Track visibility per discussion
+    @State private var newCommentContent: [String: String] = [:]
+    @State private var isNewPostExpanded: Bool = false
+    @State private var commentVisibility: [String: Bool] = [:]
 
     var body: some View {
         NavigationView {
             VStack {
-                // Collapsible button to show/hide new post section
                 Button(action: {
                     isNewPostExpanded.toggle()
                 }) {
@@ -26,7 +25,6 @@ struct DiscussionView: View {
                 }
                 .padding()
 
-                // New post section that shows when isNewPostExpanded is true
                 if isNewPostExpanded {
                     VStack {
                         TextField("Discussion Title", text: $newDiscussionTitle)
@@ -52,62 +50,61 @@ struct DiscussionView: View {
                     .padding()
                 }
 
-                // List of discussions with expandable comments section
-                List(discussionViewModel.discussions) { discussion in
-                    VStack(alignment: .leading, spacing: 10) {
-                        Text(discussion.title)
-                            .font(.headline)
-                        Text(discussion.content)
-                            .font(.subheadline)
+                List {
+                    ForEach(discussionViewModel.discussions) { discussion in
+                        VStack(alignment: .leading, spacing: 10) {
+                            Text(discussion.title)
+                                .font(.headline)
+                            Text(discussion.content)
+                                .font(.subheadline)
 
-                        // Toggle button for showing/hiding comments, with comment count in brackets
-                        Button(action: {
-                            toggleComments(for: discussion)
-                        }) {
-                            HStack {
-                                Text(commentVisibility[discussion.id] == true ? "Hide Comments" : "Show Comments")
-                                Text("(\(discussion.comments.count))")  // Comment count in brackets
-                                Spacer()
-                                Image(systemName: commentVisibility[discussion.id] == true ? "chevron.up" : "chevron.down")
-                            }
-                            .foregroundColor(.blue)
-                        }
-                        
-                        // Comments section (visible only if expanded)
-                        if commentVisibility[discussion.id] == true {
-                            VStack(alignment: .leading, spacing: 5) {
-                                ForEach(discussion.comments) { comment in
-                                    Text("• \(comment.content)")
-                                        .font(.footnote)
-                                        .padding(.leading)
+                            Button(action: {
+                                toggleComments(for: discussion)
+                            }) {
+                                HStack {
+                                    Text(commentVisibility[discussion.id] == true ? "Hide Comments" : "Show Comments")
+                                    Text("(\(discussion.comments.count))")
+                                    Spacer()
+                                    Image(systemName: commentVisibility[discussion.id] == true ? "chevron.up" : "chevron.down")
                                 }
+                                .foregroundColor(.blue)
+                            }
+                            
+                            if commentVisibility[discussion.id] == true {
+                                VStack(alignment: .leading, spacing: 5) {
+                                    ForEach(discussion.comments) { comment in
+                                        Text("• \(comment.content)")
+                                            .font(.footnote)
+                                            .padding(.leading)
+                                    }
 
-                                // Add comment field with button
-                                TextField("Add a comment...", text: Binding(
-                                    get: { newCommentContent[discussion.id, default: ""] },
-                                    set: { newCommentContent[discussion.id] = $0 }
-                                ))
-                                .textFieldStyle(RoundedBorderTextFieldStyle())
-                                .padding([.horizontal, .top])
-                                
-                                Button(action: {
-                                    addComment(to: discussion)
-                                }) {
-                                    Text("Comment")
-                                        .frame(maxWidth: .infinity)
-                                        .padding()
-                                        .background(Color.blue)
-                                        .foregroundColor(.white)
-                                        .cornerRadius(8)
+                                    TextField("Add a comment...", text: Binding(
+                                        get: { newCommentContent[discussion.id, default: ""] },
+                                        set: { newCommentContent[discussion.id] = $0 }
+                                    ))
+                                    .textFieldStyle(RoundedBorderTextFieldStyle())
+                                    .padding([.horizontal, .top])
+                                    
+                                    Button(action: {
+                                        addComment(to: discussion)
+                                    }) {
+                                        Text("Comment")
+                                            .frame(maxWidth: .infinity)
+                                            .padding()
+                                            .background(Color.blue)
+                                            .foregroundColor(.white)
+                                            .cornerRadius(8)
+                                    }
+                                    .padding([.horizontal, .bottom])
                                 }
-                                .padding([.horizontal, .bottom])
+                                .background(Color.gray.opacity(0.1))
+                                .cornerRadius(8)
+                                .padding()
                             }
-                            .background(Color.gray.opacity(0.1))
-                            .cornerRadius(8)
-                            .padding()
                         }
+                        .padding(.vertical, 5)
                     }
-                    .padding(.vertical, 5)
+                    .onDelete(perform: deleteDiscussion) // Swipe to delete feature
                 }
             }
             .navigationTitle("Discussions")
@@ -117,37 +114,32 @@ struct DiscussionView: View {
     private func addDiscussion() {
         guard !newDiscussionTitle.isEmpty && !newDiscussionContent.isEmpty else { return }
         let newDiscussion = discussionViewModel.addDiscussion(title: newDiscussionTitle, content: newDiscussionContent, dateCreated: Date(), author: "Admin")
-        commentVisibility[newDiscussion.id] = false  // Initialize visibility for the new discussion
-        newCommentContent[newDiscussion.id] = ""  // Initialize new comment content for the new discussion
+        commentVisibility[newDiscussion.id] = false
+        newCommentContent[newDiscussion.id] = ""
         newDiscussionTitle = ""
         newDiscussionContent = ""
-        isNewPostExpanded = false  // Collapse the new post section after adding
+        isNewPostExpanded = false
     }
 
     private func addComment(to discussion: Discussion) {
-        guard let commentContent = newCommentContent[discussion.id], !commentContent.isEmpty else { return }  // Ensure comment isn't empty
+        guard let commentContent = newCommentContent[discussion.id], !commentContent.isEmpty else { return }
         
         if let index = discussionViewModel.discussions.firstIndex(where: { $0.id == discussion.id }) {
-            let newComment = discussionViewModel.addComment(to: discussion, content: commentContent, dateCreated: Date(), author: "User")
-            newCommentContent[discussion.id] = ""  // Clear the comment input after posting
-            
-            // Ensure the comment section remains visible by keeping visibility state intact
+            let _ = discussionViewModel.addComment(to: discussion, content: commentContent, dateCreated: Date(), author: "User")
+            newCommentContent[discussion.id] = ""
             commentVisibility[discussion.id] = true
         }
     }
 
     private func toggleComments(for discussion: Discussion) {
-        // Toggle the visibility of comments for the selected discussion
         if let isVisible = commentVisibility[discussion.id] {
             commentVisibility[discussion.id] = !isVisible
         } else {
-            commentVisibility[discussion.id] = true  // Default to showing if not tracked
+            commentVisibility[discussion.id] = true
         }
     }
-}
 
-//struct DiscussionView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        DiscussionView()
-//    }
-//}
+    private func deleteDiscussion(at offsets: IndexSet) {
+        discussionViewModel.deleteDiscussion(at: offsets)
+    }
+}

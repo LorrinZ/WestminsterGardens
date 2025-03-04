@@ -18,7 +18,7 @@ struct HomeView: View {
     @Binding var isLoggedIn: Bool
     @State private var upcomingMeetings: [Meeting] = []
     @State private var recentDiscussions: [Discussion] = []
-    @State private var notices: [Notice] = []
+//    @State private var notices: [Notice] = []
     @ObservedObject var meetingViewModel: MeetingViewModel
     @ObservedObject var discussionViewModel: DiscussionViewModel
 
@@ -63,7 +63,7 @@ struct HomeView: View {
                                     Text("No recent discussions.")
                                         .foregroundColor(.gray)
                                 } else {
-                                    ForEach(discussionViewModel.discussions.prefix(3)) { discussion in
+                                    ForEach(discussionViewModel.discussions.prefix(5)) { discussion in
                                         DiscussionCard(discussion: discussion)
                                     }
                                 }
@@ -73,20 +73,20 @@ struct HomeView: View {
                         Spacer().frame(height: 30)
                         
                         // Notices Section
-                        Section(header: Text("Notices")
-                            .font(.headline)
-                            .foregroundColor(.blue)
-                            .padding(.bottom, 5)) {
-                                if notices.isEmpty {
-                                    Text("No recent notices.")
-                                        .foregroundColor(.gray)
-                                } else {
-                                    ForEach(notices.prefix(3)) { notice in
-                                        NoticeCard(notice: notice)
-                                    }
-                                }
-                            }
-                            .padding(.horizontal)
+//                        Section(header: Text("Notices")
+//                            .font(.headline)
+//                            .foregroundColor(.blue)
+//                            .padding(.bottom, 5)) {
+//                                if notices.isEmpty {
+//                                    Text("No recent notices.")
+//                                        .foregroundColor(.gray)
+//                                } else {
+//                                    ForEach(notices.prefix(3)) { notice in
+//                                        NoticeCard(notice: notice)
+//                                    }
+//                                }
+//                            }
+//                            .padding(.horizontal)
                     }
                     .padding()
 //                    .cornerRadius(12)
@@ -111,7 +111,7 @@ struct HomeView: View {
     private func loadDashboardData() {
         loadUpcomingMeetings()
         loadRecentDiscussions()
-        loadNotices()
+//        loadNotices()
     }
 
     private func loadUpcomingMeetings() {
@@ -132,10 +132,10 @@ struct HomeView: View {
         recentDiscussions = testData.discussions
     }
 
-    private func loadNotices() {
-        // Firestore logic to fetch recent notices
-        notices = testData.notices
-    }
+//    private func loadNotices() {
+//        // Firestore logic to fetch recent notices
+//        notices = testData.notices
+//    }
 }
 
 struct DiscussionCard: View {
@@ -160,29 +160,29 @@ struct DiscussionCard: View {
     }
 }
 
-struct NoticeCard: View {
-    var notice: Notice
-
-    var body: some View {
-        VStack(alignment: .leading) {
-            Text(notice.title)
-                .font(.headline)
-                .foregroundColor(.black)
-                .padding(.bottom, 2)
-
-            Text(notice.content)
-                .font(.body)
-                .lineLimit(2) // Limit to 2 lines
-                .foregroundColor(.black)
-
-            Text(notice.dateCreated, style: .date)
-                .font(.caption)
-                .foregroundColor(.gray)
-        }
-        .padding()
-        .background(Color.white)
-        .cornerRadius(12)
-        .shadow(color: Color.black.opacity(0.1), radius: 5, x: 0, y: 2) // Shadow effect
-    }
-}
+//struct NoticeCard: View {
+//    var notice: Notice
+//
+//    var body: some View {
+//        VStack(alignment: .leading) {
+//            Text(notice.title)
+//                .font(.headline)
+//                .foregroundColor(.black)
+//                .padding(.bottom, 2)
+//
+//            Text(notice.content)
+//                .font(.body)
+//                .lineLimit(2) // Limit to 2 lines
+//                .foregroundColor(.black)
+//
+//            Text(notice.dateCreated, style: .date)
+//                .font(.caption)
+//                .foregroundColor(.gray)
+//        }
+//        .padding()
+//        .background(Color.white)
+//        .cornerRadius(12)
+//        .shadow(color: Color.black.opacity(0.1), radius: 5, x: 0, y: 2) // Shadow effect
+//    }
+//}
 
