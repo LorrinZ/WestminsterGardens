@@ -15,5 +15,14 @@ The discussions page has a couple functions: Firstly, everyone can make and comm
 ## Useful Contacts
 The Useful Contacts page or Info page is a page that should be added on that will show key contact details for new residents to reach out to if they have any questions, includes their name, job title, phone number and email. Admins will have to manually go through the code to add new people unfortunately which will hopefully be able to be changed in the future.
 
+## Future Improvements
+In the future I hope I can change:
+- A more secure login
+- Admins don’t have to manually edit the code (for Useful Contacts)
+- Change it so residents cant deletes each other’s posts (Only their own)
+- Filter out sensitive words (warn admins if someone is acting suspiciously)
+- Add functionality so that expired meetings will be hidden or separated into a new section
+- Storing on the cloud (Google Fire Base) so data is not replaced each time you rebuild (Firebase Link already set up just not in use currently)
+- Deployment to App Store, will need to get Apple Developer Program
 
 
