@@ -1,17 +1,4 @@
-//
-//  ColourPalette.swift
-//  WestministerGardens
-//
-//  Created by Maggie Otto on 11/02/2025.
-//
 
-
-//
-//  ColourPalette.swift
-//  WestministerGardens
-//
-//  Created by Yukie on 26/09/2024.
-//
 
 import SwiftUI
 

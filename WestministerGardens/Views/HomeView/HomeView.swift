@@ -1,16 +1,3 @@
-//
-//  HomeView.swift
-//  WestministerGardens
-//
-//  Created by Yukie on 26/09/2024.
-//
-
-// NOTES
-// Firestore logic to fetch upcoming meetings
-// Example:
-// FirestoreService().loadMeetings { meetings in
-//     self.upcomingMeetings = meetings
-// }
 
 import SwiftUI
 
@@ -31,7 +18,7 @@ struct HomeView: View {
                 ScrollView {
 
                     VStack(alignment: .leading) {
-                        Text("Welcome to Westminster Gardens")
+                        Text("Welcome to The Building")
                             .font(FontConfig.titleFont)
                             .fontWeight(.bold)
                             .foregroundColor(ColourPalette.textColor)

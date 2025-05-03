@@ -1,9 +1,4 @@
-//
-//  LoginViewModel.swift
-//  WestministerGardens
-//
-//  Created by Maggie Otto on 21/01/2025.
-//
+
 
 import Foundation
 import SwiftUI
