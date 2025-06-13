@@ -20,9 +20,9 @@ In the future I hope I can change:
 - A more secure login
 - Admins don’t have to manually edit the code (for Useful Contacts)
 - Change it so residents cant deletes each other’s posts (Only their own)
-- Filter out sensitive words (warn admins if someone is acting suspiciously)(HAVE NOW ATTEMPTED NOT GOT RIGHT YET HOWEVER)
 - Add functionality so that expired meetings will be hidden or separated into a new section
 - Storing on the cloud (Google Fire Base) so data is not replaced each time you rebuild (Firebase Link already set up just not in use currently)
 - Deployment to App Store, will need to get Apple Developer Program
+- Upgrade the Swears Filter System, however it is already not bad
 
 
